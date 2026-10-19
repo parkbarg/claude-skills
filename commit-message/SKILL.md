@@ -160,3 +160,59 @@ git commit -m 'feat(backend): add Goal model with name and color fields' \
   - これは**表示するだけ**で、実行はしない。件名のみ版を使いたい場合は2つ目の `-m` を削ればよいことは自明なので、コマンドは description付き版の分だけ出す。
 
 複数コミットの場合は、依存関係を考えた**推奨コミット順**で並べる（例: build → feat/fix → test → docs）。コマンド例もその順に実行すればよい形にする。
+
+### 6. まとめ案も出す
+
+コミットが2つ以上に分かれたときは、個別案のあとに「1コミットにまとめる場合」の案も出す。ユーザーが細かく分けずにまとめてコミットしたい場合もあるため。
+
+まとめ案は次の2パターン:
+
+- **列挙型**: 各コミットの scope をカンマでつなぎ、description を `; ` で並べる
+  （例: `docs(ideas,work): add AI-era video ideas; add minimal-setup tip`）
+  - type がすべて同じときだけ使う（type が違うものは1つのヘッダーに並べられないため）
+  - ヘッダーが72文字を超えるときは、各 description を短く言い換える
+  - `docs(ideas) and docs(work):` のように type(scope) を複数書く形は Conventional Commits の形式から外れるので使わない
+- **要約型**: 変更全体を1つの description に要約する
+  （例: `docs: add work tip and new video ideas`）
+  - type が違うものが混ざる場合は、いちばん重要な変更の type を使う
+  - scope が複数ディレクトリにまたがる場合は scope を省略してよい
+
+出力フォーマット（個別案の後ろに付ける）:
+
+````markdown
+## まとめる場合（1コミット）
+
+**対象ファイル:** 個別案の全ファイル
+
+**列挙型 A. description付き**
+```
+docs(ideas,work): add AI-era video ideas; add minimal-setup tip
+
+- Add video idea on self-worth in the AI era with visual sketches
+- Add tip to experiment with a minimal setup when stuck
+```
+
+**列挙型 B. 件名のみ**
+```
+docs(ideas,work): add AI-era video ideas; add minimal-setup tip
+```
+
+**要約型 A. description付き**
+```
+docs: add work tip and new video ideas
+
+- Add tip to experiment with a minimal setup when stuck
+- Add video idea on self-worth in the AI era with visual sketches
+```
+
+**要約型 B. 件名のみ**
+```
+docs: add work tip and new video ideas
+```
+
+**コマンド例（参考・未実行）:**
+```bash
+git add <全対象ファイル>
+git commit -m '<列挙型または要約型のヘッダー>' -m '<本文>'
+```
+````
