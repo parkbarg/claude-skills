@@ -1,11 +1,11 @@
 ---
 name: commit-message
-description: 現在のgitの変更内容を読み取り、英語のコミットメッセージを提案する（git add / git commit は実行しない）。変更が論理的に複数ある場合はコミットごとに分けて提案し、それぞれ「本文（description）付き版」と「件名のみ版」の2パターンを出す。ユーザーが「コミットメッセージ作って」「コミットメッセージ考えて」「commit message」「何てコミットすればいい？」などと言ったとき、または変更をコミットする前にメッセージ案を求めているときは必ずこのスキルを使うこと。
+description: 現在のgitの変更内容を読み取り、英語のコミットメッセージを提案する（git add / git commit は実行しない）。変更が論理的に複数ある場合はコミットごとに分けて提案し、それぞれ「本文（description）付き版」「その日本語版」「件名のみ版」の3パターンを出す。ユーザーが「コミットメッセージ作って」「コミットメッセージ考えて」「commit message」「何てコミットすればいい？」などと言ったとき、または変更をコミットする前にメッセージ案を求めているときは必ずこのスキルを使うこと。
 ---
 
 # Commit Message Proposer
 
-現在の変更を分析し、英語のコミットメッセージを提案する。**提案するだけ**で、リポジトリの状態は変えない。
+現在の変更を分析し、英語のコミットメッセージを提案する（description付き版は日本語訳も併記する）。**提案するだけ**で、リポジトリの状態は変えない。
 
 ## やらないこと
 
@@ -108,7 +108,7 @@ git log --format='%s' -15  # 既存のコミットスタイル確認
 
 ### 5. 出力する
 
-以下のフォーマットで出力する。説明文は日本語、コミットメッセージ本体は英語。各メッセージはコピーしやすいようにコードブロックに入れる。
+以下のフォーマットで出力する。説明文は日本語、コミットメッセージ本体は英語（description付き版のみ日本語版も併記）。各メッセージはコピーしやすいようにコードブロックに入れる。
 
 ````markdown
 ## ⚠️ 注意点
@@ -130,6 +130,14 @@ feat(backend): add Goal model with name and color fields
 
 - Define Goal table per docs/03 database design
 - Add NOT NULL and length constraints at the DB level
+```
+
+**A-ja. description付き（日本語）**
+```
+feat(backend): name と color を持つ Goal モデルを追加
+
+- docs/03 のDB設計に沿って Goal テーブルを定義
+- DBレベルで NOT NULL と長さの制約を追加
 ```
 
 **B. 件名のみ**
@@ -154,6 +162,10 @@ git commit -m 'feat(backend): add Goal model with name and color fields' \
 - **⚠️ 注意点**: ステップ4で何か見つかったときだけ、先頭にまとめて出す。何もなければこのセクション自体を省略する（毎回「問題なし」と出すとノイズになるため）。
 - **type/scopeの理由**: 1行で、なぜそのtype（とscope）を選んだかを日本語で書く。ユーザーがConventional Commitsの使い分けを身につけられるようにするため。
 - **対象ファイル**: ステージ済みのものは `(staged)` を付ける。部分ステージが必要なファイルには `⚠️ 一部のみ` を付け、どの変更がこのコミットに含まれ、残りがどのコミットへ行くかを書く。
+- **A-ja. description付き（日本語）**: A の内容を日本語にしたもの。日本語でコミットしたい場合や、英文の意味を確認したい場合に使う。
+  - `type` / `scope` / `!` は英語のまま残す（Conventional Commits のツール互換性のため）。footer のトークン（`BREAKING CHANGE:`, `Refs:`）も英語のまま、説明部分だけ日本語にする。
+  - 件名・本文は A の直訳ベースで、内容を足したり削ったりしない。体言止め（「〜を追加」「〜を修正」）で簡潔に書き、末尾に句点を付けない。
+  - コード識別子・ファイル名・固有名詞は訳さずそのまま書く。
 - **コマンド例**: `git add`（部分ステージが必要なファイルは `git add -p` と、選ぶべき hunk の説明）と、description付き版をそのまま使える `git commit` コマンドを出す。
   - ヘッダーを最初の `-m`、本文を2つ目の `-m` に入れる（git が間に空行を入れてくれる）。破壊的変更のfooterがあれば3つ目の `-m` にする。
   - `$` やバッククォートが展開されないよう、シングルクォートで囲む。メッセージにシングルクォート（`'`）が含まれる場合は `'\''` にエスケープする。
@@ -192,6 +204,14 @@ docs(ideas,work): add AI-era video ideas; add minimal-setup tip
 - Add tip to experiment with a minimal setup when stuck
 ```
 
+**列挙型 A-ja. description付き（日本語）**
+```
+docs(ideas,work): AI時代の動画アイデアを追加; ミニマル構成のTipを追加
+
+- AI時代の自己価値をテーマにした動画アイデアをラフスケッチ付きで追加
+- 行き詰まったときにミニマル構成を試すTipを追加
+```
+
 **列挙型 B. 件名のみ**
 ```
 docs(ideas,work): add AI-era video ideas; add minimal-setup tip
@@ -203,6 +223,14 @@ docs: add work tip and new video ideas
 
 - Add tip to experiment with a minimal setup when stuck
 - Add video idea on self-worth in the AI era with visual sketches
+```
+
+**要約型 A-ja. description付き（日本語）**
+```
+docs: 作業Tipと新しい動画アイデアを追加
+
+- 行き詰まったときにミニマル構成を試すTipを追加
+- AI時代の自己価値をテーマにした動画アイデアをラフスケッチ付きで追加
 ```
 
 **要約型 B. 件名のみ**
